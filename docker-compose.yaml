@@ -1,0 +1,96 @@
+version: '3.1'
+
+services:
+
+  microserviceDb:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: p0stgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: microserviceUser
+    ports:
+      - 5432:5432
+
+  pgMyAdmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@domain.com
+      PGADMIN_DEFAULT_PASSWORD: SuperSecret
+    ports:
+      - 80:80
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    domainname: rabbitmq
+#    container_name: rabbitmq
+#    hostname: localhost
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+#    networks:
+#      - webnet
+
+  microservice-a-java:
+    image: microservice-a-example.jar
+    restart: always
+    build: ./
+    ports:
+        - 2222:2222
+#    environment:
+#      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+#    environment:
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      SPRING_RABBITMQ_PASSWORD: guest
+#      SPRING_RABBITMQ_USERNAME: guest
+#      SPRING_RABBITMQ_PORT: 5672
+    depends_on:
+      - microserviceDb
+#      - rabbitmq
+#    links:
+#      - rabbitmq
+#    networks:
+#      - webnet
+
+  microservice-b-python:
+#    image: microservice-b-example.jar
+    build: ./consumer_1
+    restart: always
+    volumes:
+      - ./consumer_1/microservice_b_python:/usr/src/app
+    ports:
+      - 5000:5000
+    depends_on:
+      - microserviceDb
+#      - rabbitmq
+#    environment:
+#      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+#    links:
+#      - rabbitmq
+#    networks:
+#      - webnet
+
+  microservice-c-js:
+    build: ./consumer_2
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - microserviceDb
+#    volumes:
+#      - ./consumer_2/sevice:/usr/src/app
+  #      - rabbitmq
+  #    environment:
+  #      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+  #    links:
+  #      - rabbitmq
+  #    networks:
+  #      - webnet
+
+#networks:
+#  webnet:
+#    driver: bridge
