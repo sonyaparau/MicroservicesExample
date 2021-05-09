@@ -2,25 +2,6 @@ version: '3.1'
 
 services:
 
-#  microserviceDb:
-#    image: postgres:12-alpine
-#    restart: always
-#    environment:
-#      POSTGRES_PASSWORD: p0stgres
-#      POSTGRES_USER: postgres
-#      POSTGRES_DB: microserviceUser
-#    ports:
-#      - 5432:5432
-
-#  pgMyAdmin:
-#    image: dpage/pgadmin4
-#    restart: always
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: user@domain.com
-#      PGADMIN_DEFAULT_PASSWORD: SuperSecret
-#    ports:
-#      - 80:80
-
   rabbitmq:
     image: rabbitmq:3-management
     domainname: rabbitmq
@@ -38,7 +19,6 @@ services:
     ports:
         - 2222:2222
     depends_on:
-#      - microserviceDb
       - rabbitmq
 
   microservice-b-python:
@@ -47,7 +27,6 @@ services:
     ports:
       - 5000:5000
     depends_on:
-#      - microserviceDb
       - rabbitmq
 
   microservice-c-js:
@@ -57,5 +36,3 @@ services:
       - 8081:8081
     depends_on:
       - rabbitmq
-#      - microserviceDb
-
