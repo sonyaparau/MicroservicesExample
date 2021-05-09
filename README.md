@@ -6,31 +6,31 @@
 5. All services should be containerized via Docker
 
 ## Solution
-1. Implemented services
-
-### service A
+### Service A
 Technology: Java Spring Boot Application
 It receives a request (e.g. via Postman) from the client, returns the response and puts a message in the queue
 Implementation details: see directory src/main/java/com/example/microservice...
     
-### service B
+### Service B
 Technology: Python
 Waits for a new message in the queue (put by service A) and logs it
 Implementation details: see directory consumer_1/..
 
-### service C
+### Service C
 Technology: JavaScript (Node JS)
 Waits for a new message in the queue (put by service A) and logs it
 Implementation details: see directory consumer_2/..
 
-### instances of service A
+### Instances of service A
    localhost:2220/...
    localhost:2221/...
    localhost:2222/...
+Locally created instances: see directory instances
+Docker images: see docker-compose file
 
-### loadbalancer 
+### Loadbalancer 
 Implementation details: see directory nginx_configuration
 Bibliography: https://blog.devgenius.io/load-balancing-a-spring-boot-application-with-nginx-and-docker-e701f74c011d
 
-### containerization
+### Containerization
 See Dockerfiles created for each service and docker-compose.yaml file.
