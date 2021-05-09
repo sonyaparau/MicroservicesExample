@@ -2,7 +2,7 @@ var amqp = require('amqplib/callback_api');
 
 var rabbitSettings = {
     protocol: "amqp",
-    hostname: "localhost",
+    hostname: "host.docker.internal",
     port: 5672,
     username: "guest",
     password: "guest",

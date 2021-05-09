@@ -33,6 +33,10 @@ public class MessagingUtils {
      */
     public static Connection createConnection() {
         ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("host.docker.internal");
+        factory.setUsername("guest");
+        factory.setPassword("guest");
+        factory.setVirtualHost("/");
         try {
             return factory.newConnection();
         } catch (TimeoutException e) {
