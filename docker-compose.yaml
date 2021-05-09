@@ -12,12 +12,30 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
 
-  microservice-a-java:
+  microservice-a-java-instance-1:
     image: microservice-a-example.jar
     restart: always
     build: ./
     ports:
-        - 2222:2222
+        - 2220:2222
+    depends_on:
+      - rabbitmq
+
+  microservice-a-java-instance-2:
+    image: microservice-a-example.jar
+    restart: always
+    build: ./
+    ports:
+      - 2221:2222
+    depends_on:
+      - rabbitmq
+
+  microservice-a-java-instance-3:
+    image: microservice-a-example.jar
+    restart: always
+    build: ./
+    ports:
+      - 2222:2222
     depends_on:
       - rabbitmq
 
@@ -36,3 +54,13 @@ services:
       - 8081:8081
     depends_on:
       - rabbitmq
+
+  load-balancer:
+    build:
+      context: ./nginx_configuration
+    ports:
+      - 9090:9090
+    depends_on:
+      - microservice-a-java-instance-1
+      - microservice-a-java-instance-2
+      - microservice-a-java-instance-3
